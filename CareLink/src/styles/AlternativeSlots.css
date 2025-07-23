@@ -1,0 +1,100 @@
+/* Background overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.35); /* light black shade */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+}
+.alternative-container {
+  z-index: 100;
+  position: relative;
+  max-width: 68rem;
+  max-height: 90vh; /* Allow it to shrink on smaller screens */
+  width: 100%;
+  padding: 20px;
+  overflow-y: auto; /* ENABLE VERTICAL SCROLLING */
+  color: black;
+  background: #2973B2;
+  border-radius: 12px;
+  animation: fadeIn 0.4s ease-in;
+}
+
+
+.alt-slot-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  padding: 10px;
+}
+
+.alt-slot-card {
+  padding: 12px;
+  border: 1px solid #9acbd0;
+  border-radius: 10px;
+  background: #9acbd0;
+  width: 220px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.alt-slot-card:hover {
+  transform: scale(1.03);
+    box-shadow: 0 2px 5px rgba(248, 247, 247, 0.63);
+
+}
+
+.alt-slot-card.blurred {
+  filter: blur(2px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.alt-slot-card.focused {
+  transform: scale(1.05);
+  z-index: 2;
+  border: 2px solid #28ba07;
+  box-shadow: 0 0 15px rgba(40, 186, 7, 0.5);
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+      color: white;
+}
+h3{
+  margin-left: 2rem;
+}
+.header button {
+    color: white;
+    border-color: #48A6A7;
+    transition: all 0.5s;
+    background: none;
+    margin-right: 2rem;
+    outline:none
+}
+.header button:hover{
+  background-color: #3f9697;
+}

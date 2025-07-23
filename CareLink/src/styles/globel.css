@@ -1,0 +1,21 @@
+body{
+    background-color: #F5F7FA;
+}
+header{
+    background-color: #2E8B57;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    color:#1A1A1A;
+    position: absolute;
+    top: 0;
+    height: 83px;
+    left: 0;
+    width: 100%;
+}
+header h2{
+margin-left: 2rem;
+}
+header button{
+    background-color: #00AEEF;
+}

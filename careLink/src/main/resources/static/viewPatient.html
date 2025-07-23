@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Patients</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Andada+Pro:ital,wght@0,400..840;1,400..840&family=Lato:ital
+,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400
+;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./css/viewPatient.css">
+</head>
+
+<body>
+
+  <div class="top-bar">
+    <h2>Patient Booking Records</h2>
+  </div>
+
+  <div class="filters">
+    <div>
+      <input type="text" class="search" placeholder="Search by name, code, or mobile number" />
+      <input type="date" id="searchDate" />
+      <select id="searchDoctor">
+        <option value="">All Doctors</option>
+      </select>
+      <select id="searchStatus">
+        <option value="">All Status</option>
+        <option value="true">Booked</option>
+        <option value="false">Waiting List</option>
+      </select>
+      <select id="Slot">
+        <option value="">Sort time slot</option>
+        <option value="9:30-11:00">9:30-11:00</option>
+        <option value="1:30-3:00">1:30-3:00</option>
+        <option value="4:30-6:00">4:30-6:00</option>
+      </select>
+      <select id="Sort">
+        <option value="name">Sort By Name</option>
+        <option value="doctor">Doctor</option>
+        <option value="status">Status</option>
+        <option value="code">Code</option>
+        <option value="date">Date</option>
+      </select>
+
+    </div>
+    <div>
+      <button class="btn" onclick="window.location.href='./addPatient.html'">+ Add Patient</button>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>SL. No</th>
+        <th>Name</th>
+        <th>Code</th>
+        <th>Mobile Number</th>
+        <th>Doctor</th>
+        <th>Date</th>
+        <th>Time Slot</th>
+        <th>Payment</th> <!-- Corrected from "Payemt" -->
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="patientTableBody">
+
+    </tbody>
+  </table>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="./js/viewPatient.js"></script>
+
+</html>

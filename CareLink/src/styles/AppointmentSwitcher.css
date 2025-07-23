@@ -1,0 +1,64 @@
+.appointment-container {
+  max-width: 1250px;
+  margin: 40px auto;
+  padding: 20px;
+  margin-top:6rem;
+  /* background-color: #f2efe7;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05); */
+}
+.switcher {
+  position: relative;
+  display: flex;
+  width: 343px;
+  margin: 30px auto;
+  margin-bottom: 1rem;;
+  outline: none;
+  background-color:  #9acbd0;
+  border-radius: 50px;
+  padding: 5px;
+  overflow: hidden;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.switcher button {
+  flex: 1;
+  padding: 12px 0;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  z-index: 2;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.switcher button.active {
+  color: #ffffff;
+}
+
+.switch-bg {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 165px;
+  height: calc(100% - 10px);
+  background-color: #2973b2;
+  border-radius: 50px;
+  transition: left 0.4s ease;
+  z-index: 1;
+}
+
+/* Slide the background to right when 'list' is active */
+.switch-bg.list {
+  left: calc(100% - 172px); /* Adjusted for padding and width */
+}
+
+
+
+.content {
+  padding: 10px;
+}
