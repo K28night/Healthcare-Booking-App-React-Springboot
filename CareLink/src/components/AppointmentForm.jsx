@@ -31,29 +31,48 @@ const generateUniqueCode = async () => {
   return newCode;
 };
 
-const AppointmentForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
+const AppointmentForm = ({receivedData,onSubmitSuccess}) => {//destruct the data coming from the parent comp
+   const [formData, setFormData] = useState({
+     name: '',
     code: generateCode(),
-    fees: '',
+    fees: '350',
     mobile: '',
     date: '',
     doctor: '',
     slot: '',
-    status: 'Pending'
-  });
+    status: true
+   })
+  useEffect(() => {
+    setFormData({
+      name: receivedData.name || '',
+      code: receivedData.code || generateCode(),
+      fees: receivedData.fees || '350',
+      mobile: receivedData.mobileNumber || '',
+      date: receivedData.date || '',
+      doctor: receivedData.doctor?.id || '',
+      slot: receivedData.timeSlot || '',
+      status: receivedData.status === true ? false : true
+    });
+
+   if (receivedData && receivedData.name) {
+    setShowSubmit(true);
+  }
+  }, [receivedData]);
+
 const clearForm = async () => {
+  
   const uniqueCode = await generateUniqueCode();
   setFormData({
     name: '',
     code: uniqueCode,
-    fees: '',
+    fees: '350',
     mobile: '',
     date: '',
     doctor: '',
     slot: '',
-    status: 'Pending'
+    status: true
   });
+  onSubmitSuccess();//clear the data from parent
   setErrors({});
   setAvailabilityChecked(false);
   setIsAvailable(false);
@@ -71,7 +90,7 @@ const handleAlternativeSelect = (slotData) => {
   // doctor: slotData.doctor, // ✅ should now match <option value={doc.id}>
   date: slotData.date,
   slot: slotData.slot,
-  status:'Available',
+  status:false,
 })
   
 );
@@ -99,7 +118,8 @@ const handleAlternativeSelect = (slotData) => {
   useEffect(() => {
     const setCode = async () => {
       const uniqueCode = await generateUniqueCode();
-      setFormData((prev) => ({ ...prev, code: uniqueCode }));
+      if(!(receivedData && receivedData.name)){
+      setFormData((prev) => ({ ...prev, code: uniqueCode }));}
      axios.get("http://localhost:9081/doctorlist")
   .then((res) => setDoctors(res.data));
 
@@ -168,7 +188,13 @@ if (!formData.doctor) newErrors.doctorId = 'Select a doctor';
       toast.error('Select doctor, date and slot to check availability');
       return;
     }
-     
+      const selectedDate = new Date(formData.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (selectedDate < today) {
+        toast.error('Date cannot be in the past');
+        return;
+      }
     setChecking(true);
     try {
       const response = await axios.post('http://localhost:9081/checkAvailability', null, {
@@ -186,21 +212,26 @@ if (!formData.doctor) newErrors.doctorId = 'Select a doctor';
       setShowSubmit(true);
        setFormData(prev => ({
   ...prev,
-  status:"Available"
-})); 
+  status: false  // Booked
+}));
+
       setAltSlots([]);
     } else if (response.data.body.waitingList) {
       toast.info("Slot is full. Patient will be added to waiting list.");
       setIsAvailable(true); // still allow submission
       setWaitingList(true);
       setShowSubmit(true); 
+      setFormData(prev => ({
+  ...prev,
+  status: true // Waiting List
+}));
+
       setAltSlots([]);
     } else {
       toast.error("Slot not available. Showing alternative slots.");
       setIsAvailable(false);
       setWaitingList(false);
       setShowSubmit(false); 
-     
       setAltSlots(response.data.body.alternatives || []);
     }
 
@@ -227,8 +258,7 @@ if (!formData.doctor) newErrors.doctorId = 'Select a doctor';
   const handleSubmit = async (e) => {
     console.log("Submitting form:", formData);
     e.preventDefault();
-    setWaitingList(false);//hide waithing list message
-    setShowSubmit(false);//clear form
+   
     const formErrors = validate();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
@@ -240,31 +270,51 @@ if (!formData.doctor) newErrors.doctorId = 'Select a doctor';
     return;
   }
     try {
-
-      const response = await axios.post('http://localhost:9081/savepatient',{
+         if (receivedData && receivedData.name) {
+      const response = await axios.put(`http://localhost:9081/update/${receivedData.id}`,{
+     
       name: formData.name,
       code: formData.code,
       date: formData.date,
       fees: formData.fees,
       mobileNumber: formData.mobile,
       doctor: { id: formData.doctor },
-      status: formData.status === 'Available' , // Or just boolean true/false
+      status: formData.status , // Or just boolean true/false
+      timeSlot: formData.slot
+        
+});
+if(response.data){
+     toast.success('Appointment Edited!');
+    onSubmitSuccess();
+  }
+         }
+else{
+     const response = await axios.post('http://localhost:9081/savepatient',{
+      name: formData.name,
+      code: formData.code,
+      date: formData.date,
+      fees: formData.fees,
+      mobileNumber: formData.mobile,
+      doctor: { id: formData.doctor },
+      status: formData.status , // Or just boolean true/false
       timeSlot: formData.slot
 });
 if(response.data){
      toast.success('Appointment Booked!');
   }
+}
+
     }
     catch(e){
       toast.error('Error occured in booking'+e)
     }
-    console.log('Form Data:', formData);
+    
    
 
     setFormData({
       name: '',
       code: generateCode(),
-      fees: '',
+      fees: '350',
       mobile: '',
       date: '',
       doctor: '',
@@ -275,6 +325,8 @@ if(response.data){
     setErrors({});
     setAvailabilityChecked(false);
     setIsAvailable(false);
+     setWaitingList(false);//hide waithing list message
+    setShowSubmit(false);//clear form
   };
 
   return (
@@ -317,6 +369,7 @@ if(response.data){
 
           <div className="form-group">
             <label>Doctor Name</label>
+
             <select name="doctor" value={formData.doctor} onChange={handleChange}>
   <option value="">Select a doctor</option>
   {doctors.map(doc => (
@@ -343,15 +396,19 @@ if(response.data){
             />
             {errors.slot && <p className="error">{errors.slot}</p>}
           </div>
-            
-          <div className="form-group">
-            <label>Status</label>
-            <select id="status" name="status"  value={formData.status} onChange={handleChange}>
-              {waitingList?<option value="Pending">Pending</option>
-              :<option value="Booked">Available</option>
-            }
-            </select>
-          </div>
+         <div className="form-group">
+  <label>Status</label>
+  <input
+    type="text"
+    value={
+      (receivedData && receivedData.status)?
+      (receivedData.status===false)? "Booked":"Waiting List" :
+      waitingList ? "Waiting List" : "Booked"
+    }
+    disabled
+  />
+</div>
+
           
           <div className="form-group buttons-row">
             {!showSubmit&&(<button

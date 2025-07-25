@@ -45,7 +45,7 @@ public class CareLinkService {
         if ((!isUpdate) && (code.isEmpty())) {
             throw new ValidationException("Patient code must not be empty");
         }
-        if (!code.matches("^P\\d{3,}$")) {
+        if (!code.matches("^APT\\d{3,}$")) {
             throw new ValidationException("Patient code must start with P and follows 3 digits(like P104)");
         }
 

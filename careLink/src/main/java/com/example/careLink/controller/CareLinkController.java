@@ -13,7 +13,7 @@ import com.example.careLink.entity.Patient;
 import com.example.careLink.service.CareLinkService;
 
 // @Controller
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 @RestController
 
 public class CareLinkController {

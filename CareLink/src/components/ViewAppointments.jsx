@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/ViewAppointments.css"; // Create for styling
+import toast, { Toaster } from 'react-hot-toast';
 
-const ViewAppointments = () => {
+import 'react-toastify/dist/ReactToastify.css';
+
+const ViewAppointments = ({sendData}) => {
   const [appointments, setAppointments] = useState([]);
   const [filtered, setFiltered] = useState([]);
+//   const [editData,setEditData]=useState({})
   const [filters, setFilters] = useState({
     search: "",
     date: "",
@@ -15,10 +19,11 @@ const ViewAppointments = () => {
     sortOrder: ""
   });
 const [doctors,setDoctors]=useState([]);
-axios.get("http://localhost:9081/doctorlist")
-  .then((res) => setDoctors(res.data));
+
 
   useEffect(() => {
+    axios.get("http://localhost:9081/doctorlist")
+  .then((res) => setDoctors(res.data));
     fetchAppointments();
   }, []);
 
@@ -29,7 +34,7 @@ axios.get("http://localhost:9081/doctorlist")
   const fetchAppointments = async () => {
     try {
       const response = await axios.get("http://localhost:9081/displayall", {
-  params: { sort: "name" } // ✅ Like jQuery's `data: { sort: "name" }`
+  params: { sort: "name" } 
 });
 console.log(response.data);
       setAppointments(response.data);
@@ -61,7 +66,7 @@ if (filters.doctor) {
 }
 
     if (filters.status) data = data.filter(a => a.status ==filters.status);
-   // ✅ Correct
+   
 if (filters.slot) {
   data = data.filter(
     (a) =>
@@ -85,6 +90,103 @@ if (filters.slot) {
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
+
+// const confirmDelete = (id, name) => {
+//  toast.custom((t) => (
+//   <div
+//     className={`custom-toast ${t.visible ? 'visible' : 'hidden'}`}
+//   >
+//     <p className="font-semibold text-gray-800">Confirm Delete</p>
+//     <p className="text-sm text-gray-600 mt-1">
+//       Are you sure you want to delete <span className="font-bold">{name}</span>?
+//     </p>
+//     <div className="mt-4 flex justify-end space-x-3">
+//       <button
+//         className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm"
+//         onClick={() => toast.dismiss(t.id)}
+//       >
+//         Cancel
+//       </button>
+//       <button
+//         className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+//         onClick={() => {
+//           DeleteBooking(id, name);
+//           toast.dismiss(t.id);
+//         }}
+//       >
+//         Delete
+//       </button>
+//     </div>
+//   </div>
+// ));
+
+// };
+
+
+const DeleteBooking = (id, name) => {
+  let isUndoClicked = false;
+
+  toast((t) => (
+    <div>
+      <span>Deleted <b>{name}</b></span>
+      <button
+        onClick={() => {
+          isUndoClicked = true;  // This closure is unique to this delete
+          toast.dismiss(t.id);
+          toast.success("Undo successful", {
+            style: {
+              background: '#dcfce7',
+              color: '#166534',
+            },
+          });
+        }}
+        style={{
+          marginLeft: '10px',
+          color: '#10b981',
+          fontWeight: 'bold',
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer'
+        }}
+      >
+        Undo
+      </button>
+    </div>
+  ), {
+    duration: 5000,
+    style: {
+      background: '#fff',
+      color: '#000',
+      padding: '10px 15px',
+      border: '1px solid #e5e7eb',
+      borderRadius: '8px'
+    }
+  });
+
+  // Capture the unique value of `isUndoClicked` in this timer's closure
+  setTimeout(() => {
+    if (!isUndoClicked) {
+      axios.get(`http://localhost:9081/delete/${id}`)
+        .then(() => {
+          fetchAppointments();
+          toast.success(`Deleted ${name}`, {
+            style: {
+              background: '#fee2e2',
+              color: '#991b1b',
+            },
+          });
+        })
+        .catch(e => {
+          toast.error(`Failed to delete ${name}: ${e.message}`);
+        });
+    }
+  }, 5000);
+};
+
+const EditingData=(item)=>{
+    console.log("Data to parent "+item)
+sendData(item);
+}
 
   return (
     <div className="appointments-container">
@@ -194,13 +296,41 @@ if (filters.slot) {
 
               </td>
               <td>
-                <button className="edit-btn">Edit</button>
-                <button className="delete-btn">Delete</button>
+                <button className="edit-btn" onClick={()=>EditingData(item)}>Edit</button>
+                <button className="delete-btn" onClick={()=>DeleteBooking(item.id,item.name)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+<Toaster
+  position="top-center"
+  reverseOrder={false}
+  toastOptions={{
+    style: {
+      background: '#4ade80',   // ✅ light green background
+      color: '#000',           // ✅ black text
+      border: '1px solid #16a34a',
+    },
+    success: {
+      iconTheme: {
+        primary: '#16a34a',    // green tick color
+        secondary: '#f0fdf4',  // background of icon
+      },
+    },
+    error: {
+      style: {
+        background: '#f87171',  // red background
+        color: '#fff',
+      },
+      iconTheme: {
+        primary: '#b91c1c',
+        secondary: '#fff',
+      },
+    },
+  }}
+/>
+
     </div>
   );
 };
