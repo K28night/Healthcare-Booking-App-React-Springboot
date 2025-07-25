@@ -1,21 +1,25 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useRef } from 'react';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import AppointmentForm from './AppointmentForm';
 import AppointmentList from './ViewAppointments';
 import '../styles/AppointmentSwitcher.css';
 
 const AppointmentSwitcher = () => {
   const [view, setView] = useState('form');
+    // Refs for animation containers
+  const nodeRef = useRef(null);
   const [message, setMessage] = useState({});
-  useEffect(() => {
-  console.log("Updated message:", message);
-}, [message]);
-const handleEditData = (data) => {
-  console.log("Received from child:", data);
-  // Set it in state or do anything else
-    setMessage(data);
+//   useEffect(() => {
+//   console.log("Updated message:", message);
+// }, [message]);
 
-  setView('form')
-};
+  const handleEditData = (data) => {
+    console.log("Received from child:", data);
+
+    setMessage(data);//to send data to parent
+
+    setView('form')//to switch the form
+  };
 
   return (
     <div className="appointment-container">
@@ -34,10 +38,21 @@ const handleEditData = (data) => {
           View Appointments
         </button>
       </div>
-
-      <div className="content">
-        {view === 'form' ? <AppointmentForm onSubmitSuccess={() => setMessage({})} receivedData={message}/> : <AppointmentList sendData={handleEditData} />}
+     <SwitchTransition mode="out-in">
+          <CSSTransition
+            key={view}
+            timeout={300}
+            classNames="fade"
+              nodeRef={nodeRef}
+            unmountOnExit
+          >
+      <div className="content" ref={nodeRef}>
+        {view === 'form' ? <AppointmentForm 
+        onSubmitSuccess={() => setMessage({})} 
+        receivedData={message}/> : <AppointmentList 
+        sendData={handleEditData} />}
       </div>
+      </CSSTransition></SwitchTransition>
     </div>
   );
 };
