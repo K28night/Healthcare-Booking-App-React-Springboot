@@ -109,7 +109,7 @@ npm start
 
 ## UI Preview
 > *(Add screenshots or GIFs here if needed)*
-![CareLink Screenshot]((https://github.com/K28night/Healthcare-Booking-App-React-Springboot/blob/master/ScreenerShot/Screenshot%20from%202025-07-29%2014-45-41.png))
+!((https://github.com/K28night/Healthcare-Booking-App-React-Springboot/blob/master/ScreenerShot/Screenshot%20from%202025-07-29%2014-45-41.png))
 ---
 
 
