@@ -111,6 +111,8 @@ npm start
 
 > *(Add screenshots or GIFs here if needed)*
 ---
+/screernshot/Screenshot from 2025-07-29 14-45-41.png
+
 
 ## 📌 Status Colors Legend
 
