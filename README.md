@@ -17,7 +17,7 @@ This project is a full-stack **Healthcare Booking System** built using **React.j
 
 ---
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 | Frontend       | Backend         | Database   |
 |----------------|------------------|-------------|
@@ -119,12 +119,12 @@ npm start
 
 
 
-## 📌 Status Colors Legend
+## Status Colors Legend
 
 | Status       | Color     |
 |--------------|-----------|
-| Booked       | 🟩 Green   |
-| Pending      | 🟥 Red     |
+| Booked       |   Green   |
+| Pending      |   Red     |
 
 ---
 
