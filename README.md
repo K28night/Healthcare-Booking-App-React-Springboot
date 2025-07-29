@@ -109,7 +109,8 @@ npm start
 
 ## UI Preview
 > *(Add screenshots or GIFs here if needed)*
-(./ScreenerShot/Screenshot from 2025-07-29 14-45-41.png)
+![Screenshot](./ScreenerShot/Screenshot%20from%202025-07-29%2014-45-41.png)
+
 ---
 
 
