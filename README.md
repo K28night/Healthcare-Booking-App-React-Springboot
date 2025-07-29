@@ -108,9 +108,8 @@ npm start
 ---
 
 ## UI Preview
-
-
-![CareLink Screenshot](./ScreenerShot/Screenshot 2025-07-29.png)
+> *(Add screenshots or GIFs here if needed)*
+![CareLink Screenshot](./ScreenerShot/screenshot-2025-07-29.png)
 ---
 
 
