@@ -111,7 +111,7 @@ npm start
 
 > *(Add screenshots or GIFs here if needed)*
 ---
-![CareLink Screenshot](./screernshot/Screenshot from 2025-07-29 14-45-41.png)
+![CareLink Screenshot](./ScreenerShot/Screenshot from 2025-07-29 14-45-41.png)
 
 
 
